@@ -1,7 +1,31 @@
+import { useState } from "react";
 import NewNoteCard from "./components/new-note-card/new-note-card";
 import NoteCard from "./components/note-card/note-card";
 
 function App() {
+  const [notes, setNotes] = useState([
+    {
+      id: 1,
+      date: new Date(),
+      content: "Hello World",
+    },
+    {
+      id: 2,
+      date: new Date(),
+      content: "Hello World",
+    },
+  ]);
+
+  function onNoteCreated(content: string) {
+    const newNote = {
+      id: Math.random(),
+      date: new Date(),
+      content,
+    };
+
+    setNotes([newNote, ...notes]);
+  }
+
   return (
     <div className="mx-auto max-w-6xl my-12">
       <form className="w-full space-y-6">
@@ -12,13 +36,11 @@ function App() {
         />
         <div className="bg-slate-700 h-px" />
         <div className="grid grid-cols-3 gap-6 auto-rows-[250px]">
-          <NewNoteCard />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content: "Hello World",
-            }}
-          />
+          <NewNoteCard onNoteCreated={onNoteCreated} />
+
+          {notes.map((note) => {
+            return <NoteCard key={note.id} note={note} />;
+          })}
         </div>
       </form>
     </div>
